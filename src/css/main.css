@@ -40,8 +40,12 @@ body {
 }
 .block-main {
     position: relative;
-    background: rgb(138,215,86);
-    background: linear-gradient(214deg, rgba(138,215,86,1) 30%, rgba(203,249,151,1) 50%, rgba(228,254,70,1) 75%);
+    background:
+            radial-gradient(49% 81% at 45% 47%, #cbf997 32%, #073AFF00 100%),
+            radial-gradient(142% 91% at 83% 7%, #8ad756 35%, #FF000000 99%),
+            radial-gradient(113% 91% at 17% -2%, #cbf997 69%, #FF000000 99%),
+            radial-gradient(142% 91% at -6% 74%, #e4fe46 2%, #FF000000 99%),
+            radial-gradient(142% 91% at 111% 84%, #cbf997 30%, #FF0000FF 98%);
     border-radius: 0 0 30px 30px;
     padding-top: 30px;
     padding-bottom: 30px;

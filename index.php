@@ -207,7 +207,6 @@ $currencies = [
         </div>
     </div>
 </div>
-
 <div id="js">
     <script src="src/js/jquery.min.js"></script>
     <script src="src/js/imgcolr.html5.min.js"></script>
