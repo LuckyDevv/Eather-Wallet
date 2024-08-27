@@ -6,6 +6,63 @@ function getTemplate(string $template): false|string
     include(__DIR__.'/src/tpl/' . $template . ".tpl");
     return ob_get_clean();
 }
+$currencies = [
+    'usd' => [
+        'active' => true,
+        'border' => 'border-bottom-1',
+        'cdr' => '$'
+    ],
+    'eur' => [
+        'active' => true,
+        'border' => 'border-bottom-1',
+        'cdr' => '€'
+    ],
+    'rub' => [
+        'active' => true,
+        'border' => 'border-bottom-1',
+        'cdr' => '₽'
+    ],
+    'jpy' => [
+        'active' => true,
+        'border' => 'border-bottom-1',
+        'cdr' => '¥'
+    ],
+    'gbp' => [
+        'active' => true,
+        'border' => 'border-bottom-1',
+        'cdr' => '£'
+    ],
+    'aud' => [
+        'active' => true,
+        'border' => 'border-bottom-1',
+        'cdr' => 'AU$'
+    ],
+    'cad' => [
+        'active' => true,
+        'border' => 'border-bottom-1',
+        'cdr' => 'CA$'
+    ],
+    'chf' => [
+        'active' => true,
+        'border' => 'border-bottom-1',
+        'cdr' => '₣'
+    ],
+    'cny' => [
+        'active' => true,
+        'border' => 'border-bottom-1',
+        'cdr' => '¥'
+    ],
+    'hkd' => [
+        'active' => true,
+        'border' => 'border-bottom-1',
+        'cdr' => 'HK$'
+    ],
+    'nzd' => [
+        'active' => true,
+        'border' => '',
+        'cdr' => 'NZ$'
+    ],
+]
 ?>
 
 <!DOCTYPE html>
@@ -20,69 +77,75 @@ function getTemplate(string $template): false|string
 <body>
 <div class="container-main" id="content"  hidden="hidden" style="display: none;">
     <div class="block-main" id="main-block">
-        <div class="block-hello">
-            Добрый день, Lucky!
-            <div class="block-notify" id="block-notify">
+        <?php
+        $main_tpl = getTemplate('main');
+        $dropdown_content = '';
+        $balance_separator = '<span class="span-money-currency">,';
+        $username = 'NAN';
+        $balance = 0;
+        $current_currency = 'rub';
+        if (isset($currencies[$current_currency]))
+        {
+            $user_currency = [$current_currency, $currencies[$current_currency]];
+        }else{
+            $user_currency = ['rub', $currencies['rub']];
+        }
+
+        $currenciesList = '';
+        $currencyTpl = getTemplate('currency');
+        foreach ($currencies as $code => $params) {
+            if ($params['active']) {
+                $currenciesList .= str_replace(array(
+                    '{lower_name}',
+                    '{border}',
+                    '{upper_name}',
+                    '{path}'
+                ), array(
+                    $code,
+                    $params['border'],
+                    strtoupper($code),
+                    'src/flags/' . $code . '.jpg'
+                ), $currencyTpl);
+            }
+        }
+
+        echo str_replace(array(
+            '{username}',
+            '{current_currency_name}',
+            '{current_currency_path}',
+            '{dropdown_content}',
+            '{current_currency_cdr}',
+            '{user_balance}'
+        ), array(
+            $username,
+            strtoupper($user_currency[0]),
+            'src/flags/' . $user_currency[0] . '.jpg',
+            $currenciesList,
+            $user_currency[1]['cdr'],
+            number_format($balance, 2, $balance_separator, ' ').'</span>'
+        ), $main_tpl);
+
+        ?>
+    </div>
+    <div class="block-news" id="news-block">
+        <div class="block-news-title">
+            Новости и предложения
+        </div>
+        <div class="item-news">
+            <img class="item-news-image" alt="" src="src/images/update.jpg">
+            <div class="item-news-about">
+                <div class="item-news-title">
+                    Обновление 0.1.0-dev
+                </div>
+                <div class="item-news-description">
+                    Данное обновление означает только то, что наше приложение наконец официально появилось на GitHub!
+                    Разработка идёт очень активно, и в скором времени вы сможете увидеть полную версию кошелька.
+                    Наш кошелёк будет интегрирован в наш интернет-магазин для проведения оплаты заказов.
+                </div>
             </div>
         </div>
-        <div class="block-balance">
-            <div class="block-currency" id="currency-change" onclick="openDropDown()">
-                <span id="current-currency-name">RUB</span>
-                <img src="src/flags/rub.jpg" id="current-currency-image" class="currency-image" alt="">
-            </div>
-            <div id="changeCurrencyDropdown" class="dropdown-content">
-                <div id="usd-dropdown-currency" class="block-currency-dropdown border-bottom-1" onclick="changeCurrentCurrency(this)">
-                    <span>USD</span>
-                    <img src="src/flags/usd.jpg" class="currency-image" alt="">
-                </div>
-                <div id="eur-dropdown-currency" class="block-currency-dropdown border-bottom-1" onclick="changeCurrentCurrency(this)">
-                    <span>EUR</span>
-                    <img src="src/flags/eur.jpg" class="currency-image" alt="">
-                </div>
-                <div id="rub-dropdown-currency" class="block-currency-dropdown border-bottom-1" onclick="changeCurrentCurrency(this)">
-                    <span>RUB</span>
-                    <img src="src/flags/rub.jpg" class="currency-image" alt="">
-                </div>
-                <div id="jpy-dropdown-currency" class="block-currency-dropdown border-bottom-1" onclick="changeCurrentCurrency(this)">
-                    <span>JPY</span>
-                    <img src="src/flags/jpy.jpg" class="currency-image" alt="">
-                </div>
-                <div id="gbp-dropdown-currency" class="block-currency-dropdown border-bottom-1" onclick="changeCurrentCurrency(this)">
-                    <span>GBP</span>
-                    <img src="src/flags/gbp.jpg" class="currency-image" alt="">
-                </div>
-                <div id="aud-dropdown-currency" class="block-currency-dropdown border-bottom-1" onclick="changeCurrentCurrency(this)">
-                    <span>AUD</span>
-                    <img src="src/flags/aud.jpg" class="currency-image" alt="">
-                </div>
-                <div id="cad-dropdown-currency" class="block-currency-dropdown border-bottom-1" onclick="changeCurrentCurrency(this)">
-                    <span>CAD</span>
-                    <img src="src/flags/cad.jpg" class="currency-image" alt="">
-                </div>
-                <div id="chf-dropdown-currency" class="block-currency-dropdown border-bottom-1" onclick="changeCurrentCurrency(this)">
-                    <span>CHF</span>
-                    <img src="src/flags/chf.jpg" class="currency-image" alt="">
-                </div>
-                <div id="cny-dropdown-currency" class="block-currency-dropdown border-bottom-1" onclick="changeCurrentCurrency(this)">
-                    <span>CNY</span>
-                    <img src="src/flags/cny.jpg" class="currency-image" alt="">
-                </div>
-                <div id="hkd-dropdown-currency" class="block-currency-dropdown border-bottom-1" onclick="changeCurrentCurrency(this)">
-                    <span>HKD</span>
-                    <img src="src/flags/hkd.jpg" class="currency-image" alt="">
-                </div>
-                <div id="nzd-dropdown-currency" class="block-currency-dropdown" onclick="changeCurrentCurrency(this)">
-                    <span>NZD</span>
-                    <img src="src/flags/nzd.jpg" class="currency-image" alt="">
-                </div>
-            </div>
-            <div class="block-money" id="block_money">
-                <span id="money-currency" class="span-money-currency">₽</span>
-                <span id="money-balance">100,00</span>
-            </div>
-            <!--<div class="block-money-notify">
-                -300,00 ₽ за покупку в EATHER
-            </div>-->
+        <div class="block-news-end">
+            На этом новости и предложения закончились...
         </div>
     </div>
     <div class="block-history" id="history-block" hidden="hidden">
@@ -137,7 +200,7 @@ function getTemplate(string $template): false|string
 <div class="no-support-device" hidden id="no-support" style="display: none;">
     <div class="no-support-container">
         <div class="no-support-message">
-            <img src="src/images/duck.gif">
+            <img src="src/images/duck.gif" alt="">
             <div>
                 Извините, наше приложение не поддерживается на вашем устройстве :(
             </div>

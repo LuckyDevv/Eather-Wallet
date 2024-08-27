@@ -305,26 +305,31 @@ function setBlock(id)
         case 'nav-home':
             setCookie('nav', 'home');
             document.getElementById('main-block').removeAttribute('hidden');
+            document.getElementById('news-block').removeAttribute('hidden');
             document.getElementById('history-block').setAttribute('hidden', 'hidden');
             break;
         case 'nav-swap':
             setCookie('nav', 'home');
             document.getElementById('main-block').removeAttribute('hidden');
+            document.getElementById('news-block').removeAttribute('hidden');
             document.getElementById('history-block').setAttribute('hidden', 'hidden');
             break;
         case 'nav-history':
             setCookie('nav', 'history');
             document.getElementById('history-block').removeAttribute('hidden');
             document.getElementById('main-block').setAttribute('hidden', 'hidden');
+            document.getElementById('news-block').setAttribute('hidden', 'hidden');
             break;
         case 'nav-bell':
             setCookie('nav', 'home');
             document.getElementById('main-block').removeAttribute('hidden');
+            document.getElementById('news-block').removeAttribute('hidden');
             document.getElementById('history-block').setAttribute('hidden', 'hidden');
             break;
         case 'nav-settings':
             setCookie('nav', 'home');
             document.getElementById('main-block').removeAttribute('hidden');
+            document.getElementById('news-block').removeAttribute('hidden');
             document.getElementById('history-block').setAttribute('hidden', 'hidden');
             break;
     }
